@@ -22,6 +22,9 @@ import java.util.UUID;
 @RequestMapping("/api/1.0/users")
 public class UserController {
 
+    private static final String ON_SUCCESS_MESSAGE = "Success!";
+    private static final String NOT_FOUND_MESSAGE = "User not found!";
+
     @Autowired
     UserService userService;
 
@@ -32,10 +35,17 @@ public class UserController {
 
     @GetMapping("/user-id/{id}")
     public ResponseEntity<Object> getUserById(@PathVariable(value = "id") UUID id) {
-        final String notFoundMessage = "User not found!";
-        Optional<User> parkingSpotModelOptional = userService.findById(id);
+        Optional<User> user = userService.findById(id);
 
-        return parkingSpotModelOptional.<ResponseEntity<Object>>map(parkingSpot -> ResponseEntity.status(HttpStatus.OK).body(parkingSpot)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFoundMessage));
+        return user.<ResponseEntity<Object>>map(u -> ResponseEntity.status(HttpStatus.OK).body(u)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(NOT_FOUND_MESSAGE));
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Object> getUserByEmail(@PathVariable(value = "email") String email) {
+        final String notFoundMessage = "User not found!";
+        Optional<User> user = userService.findUserByEmail(email);
+
+        return user.<ResponseEntity<Object>>map(u -> ResponseEntity.status(HttpStatus.OK).body(u)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFoundMessage));
     }
 
     @PostMapping("/singup")
@@ -53,16 +63,14 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") UUID id) {
-        final String notFoundMessage = "User not found to delete!";
-        final String onSuccessMessage = "User deleted successfully!";
         Optional<User> userOptional = userService.findById(id);
 
         if (userOptional.isPresent()) {
             userService.deleteUser(id);
-            return ResponseEntity.status(HttpStatus.OK).body(onSuccessMessage);
+            return ResponseEntity.status(HttpStatus.OK).body(ON_SUCCESS_MESSAGE);
         }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFoundMessage);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(NOT_FOUND_MESSAGE);
     }
 
 }

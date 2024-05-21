@@ -30,7 +30,7 @@ public class User implements Serializable {
     @Field("userPassword")
     private String userPassword;
 
-    @Indexed(direction = IndexDirection.ASCENDING)
+    @Indexed(direction = IndexDirection.ASCENDING, unique = true)
     @Field("email")
     private String email;
 

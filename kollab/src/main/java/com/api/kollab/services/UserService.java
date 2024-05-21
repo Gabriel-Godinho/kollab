@@ -23,7 +23,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public User findUserByEmail(String email) {
+    public Optional<User> findUserByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
 
