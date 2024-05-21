@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -29,23 +28,26 @@ public class UserController {
     UserService userService;
 
     @GetMapping
-    public ResponseEntity<Object> getAllUsers(@PageableDefault(size = 5, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Object> getAllUsers(@PageableDefault(size = 5, sort = "registrationDate", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAllUsers(pageable));
     }
 
     @GetMapping("/user-id/{id}")
-    public ResponseEntity<Object> getUserById(@PathVariable(value = "id") UUID id) {
+    public ResponseEntity<Object> getUserById(@PathVariable(value = "id") String id) {
         Optional<User> user = userService.findById(id);
 
-        return user.<ResponseEntity<Object>>map(u -> ResponseEntity.status(HttpStatus.OK).body(u)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(NOT_FOUND_MESSAGE));
+        return user.<ResponseEntity<Object>>map(u -> ResponseEntity.status(HttpStatus.OK).body(u))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(NOT_FOUND_MESSAGE));
     }
 
     @GetMapping("/email/{email}")
     public ResponseEntity<Object> getUserByEmail(@PathVariable(value = "email") String email) {
-        final String notFoundMessage = "User not found!";
         Optional<User> user = userService.findUserByEmail(email);
 
-        return user.<ResponseEntity<Object>>map(u -> ResponseEntity.status(HttpStatus.OK).body(u)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFoundMessage));
+        return user.<ResponseEntity<Object>>map(u -> ResponseEntity.status(HttpStatus.OK).body(u))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(NOT_FOUND_MESSAGE));
     }
 
     @PostMapping("/singup")
@@ -62,7 +64,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") UUID id) {
+    public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") String id) {
         Optional<User> userOptional = userService.findById(id);
 
         if (userOptional.isPresent()) {

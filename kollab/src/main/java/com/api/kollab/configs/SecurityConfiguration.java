@@ -2,6 +2,7 @@ package com.api.kollab.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,6 +25,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    @Primary
     public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }

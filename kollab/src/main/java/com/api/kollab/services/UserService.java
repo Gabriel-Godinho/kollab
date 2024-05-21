@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserService {
@@ -19,7 +18,7 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public Optional<User> findById(UUID id){
+    public Optional<User> findById(String id){
         return userRepository.findById(id);
     }
 
@@ -47,8 +46,8 @@ public class UserService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public void deleteUser(UUID userToDelete) {
-        userRepository.deleteById(userToDelete);
+    public void deleteUser(String id) {
+        userRepository.deleteById(id);
     }
 
 }
