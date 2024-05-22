@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -52,7 +53,7 @@ public class UserController {
 
     @PostMapping("/singup")
     public ResponseEntity<Object> saveUser(@RequestBody UserRecord user) {
-        final String encodedPassword = SecurityConfiguration.passwordEncoder().encode(user.userPassword());
+        final String encodedPassword = userService.hashPassword(user.userPassword());;
 
         User newUser = new User();
         newUser.setUsername(user.username());
