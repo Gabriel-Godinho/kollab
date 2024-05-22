@@ -53,7 +53,7 @@ public class UserController {
 
     @PostMapping("/singup")
     public ResponseEntity<Object> saveUser(@RequestBody UserRecord user) {
-        final String encodedPassword = userService.hashPassword(user.userPassword());;
+        final String encodedPassword = userService.hashPassword(user.userPassword());
 
         User newUser = new User();
         newUser.setUsername(user.username());
@@ -62,6 +62,22 @@ public class UserController {
         newUser.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(newUser));
+    }
+
+    @PutMapping("/update-password/{id}")
+    public ResponseEntity<Object> updateUserPassword(@PathVariable("id") String id, @RequestBody UserRecord user) {
+        Optional<User> savedUser = userService.findById(id);
+
+        if (savedUser.isPresent()) {
+            User updatedUser = savedUser.get();
+            updatedUser.setUserPassword(userService.hashPassword(user.userPassword()));
+
+            userService.updateUser(updatedUser);
+
+            return ResponseEntity.ok(ON_SUCCESS_MESSAGE);
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(NOT_FOUND_MESSAGE);
     }
 
     @DeleteMapping("/{id}")
