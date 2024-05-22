@@ -40,8 +40,8 @@ public class UserService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public User updateUser(User userToUpdate) {
-        return userRepository.save(userToUpdate);
+    public void updateUser(User userToUpdate) {
+        userRepository.save(userToUpdate);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)

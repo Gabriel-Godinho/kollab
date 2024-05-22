@@ -1,6 +1,5 @@
 package com.api.kollab.controllers;
 
-import com.api.kollab.configs.SecurityConfiguration;
 import com.api.kollab.dto.UserRecord;
 import com.api.kollab.models.User;
 import com.api.kollab.services.UserService;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -30,14 +28,14 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<Object> getAllUsers(@PageableDefault(size = 5, sort = "registrationDate", direction = Sort.Direction.ASC) Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findAllUsers(pageable));
+        return ResponseEntity.ok(userService.findAllUsers(pageable));
     }
 
     @GetMapping("/user-id/{id}")
     public ResponseEntity<Object> getUserById(@PathVariable(value = "id") String id) {
         Optional<User> user = userService.findById(id);
 
-        return user.<ResponseEntity<Object>>map(u -> ResponseEntity.status(HttpStatus.OK).body(u))
+        return user.<ResponseEntity<Object>>map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(NOT_FOUND_MESSAGE));
     }
@@ -46,7 +44,7 @@ public class UserController {
     public ResponseEntity<Object> getUserByEmail(@PathVariable(value = "email") String email) {
         Optional<User> user = userService.findUserByEmail(email);
 
-        return user.<ResponseEntity<Object>>map(u -> ResponseEntity.status(HttpStatus.OK).body(u))
+        return user.<ResponseEntity<Object>>map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(NOT_FOUND_MESSAGE));
     }
@@ -64,13 +62,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(newUser));
     }
 
-    @PutMapping("/update-password/{id}")
-    public ResponseEntity<Object> updateUserPassword(@PathVariable("id") String id, @RequestBody UserRecord user) {
+    @PutMapping("/update-password/{id}/{newPassword}")
+    public ResponseEntity<Object> updateUserPassword(@PathVariable("id") String id, @PathVariable("newPassword") String newPassword) {
         Optional<User> savedUser = userService.findById(id);
 
         if (savedUser.isPresent()) {
             User updatedUser = savedUser.get();
-            updatedUser.setUserPassword(userService.hashPassword(user.userPassword()));
+            updatedUser.setUserPassword(userService.hashPassword(newPassword));
 
             userService.updateUser(updatedUser);
 
@@ -86,7 +84,7 @@ public class UserController {
 
         if (userOptional.isPresent()) {
             userService.deleteUser(id);
-            return ResponseEntity.status(HttpStatus.OK).body(ON_SUCCESS_MESSAGE);
+            return ResponseEntity.ok(ON_SUCCESS_MESSAGE);
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(NOT_FOUND_MESSAGE);
