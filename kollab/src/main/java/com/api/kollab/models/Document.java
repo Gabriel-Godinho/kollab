@@ -7,17 +7,14 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.io.Serial;
 import java.io.Serializable;
-import java.lang.annotation.Inherited;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Document(collection = "projects")
+@Document(collection = "documents")
 @NoArgsConstructor @AllArgsConstructor
 @ToString @EqualsAndHashCode
 @Getter @Setter
-public class Project implements Serializable {
+public class Document implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -26,18 +23,22 @@ public class Project implements Serializable {
     @ToString.Exclude
     private String id;
 
-    @Indexed(direction = IndexDirection.ASCENDING)
-    @Field("projectName")
-    private String projectName;
+    @Field("project_id")
+    private String projectId;
 
-    @Indexed(direction = IndexDirection.ASCENDING)
-    @Field("adminUser")
-    private String adminUser;
+    @Field("user_id")
+    private String userId;
 
-    @Field("members")
-    private List<String> members;
+    @Field("documentName")
+    private String documentName;
 
-    @Field("creationDate")
-    private LocalDateTime creationDate;
+    @Field("documentExtension")
+    private String documentExtension;
+
+    @Field("documentContent")
+    private String documentContent;
+
+    @Field("uploadDate")
+    private LocalDateTime uploadDate;
 
 }
