@@ -8,6 +8,7 @@ const Routering = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<h1>Landing page</h1>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/cadastro" element={<Register/>} />
         <Route path="/home" element={

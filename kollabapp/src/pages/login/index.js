@@ -55,8 +55,7 @@ const Login = () => {
           disabled={loading}
         />
         <SubContainerSign>
-          <p>Não possui conta?</p>
-          <NavLink to="/cadastro">Crie uma!</NavLink>
+          <p>Não possui conta? <NavLink to="/cadastro">Crie uma!</NavLink></p>
         </SubContainerSign>
       </Form>
     </Container>

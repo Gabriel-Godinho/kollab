@@ -72,8 +72,7 @@ const Register = () => {
           disabled={loading}
         />
         <SubContainerSign>
-          <p>Já possui conta?</p>
-          <NavLink to="/login">Entre!</NavLink>
+          <p>Já possui conta? <NavLink to="/login">Entre!</NavLink></p>
         </SubContainerSign>
       </Form>
     </Container>
