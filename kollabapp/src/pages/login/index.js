@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Container, Form, SubContainerSign } from "./style";
 import Input from "../../components/input";
 import Button from "../../components/button";
-import UserService from "../../services/userService";
+import UserService from "../../services/UserService";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const userService = new UserService();
