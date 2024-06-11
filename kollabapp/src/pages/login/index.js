@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Container, Form, SubContainerSign } from "./style";
 import Input from "../../components/input";
 import Button from "../../components/button";
 import UserService from "../../services/UserService";
+import { Container, Form, SubContainerSign } from "./style";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const userService = new UserService();
@@ -15,10 +15,12 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      setLoading(true)
-      const response = await userService.login(form)
+      // TODO - AJUSTAR OBJETO PARA FICAR IGUAL AO BACKEND
+      const { data } = await userService.login(form)
 
-      if (response) navigate("/home")
+      setLoading(true)
+
+      if (data) navigate("/home")
       
       setLoading(false)
     } catch (error) {
