@@ -8,30 +8,37 @@ export default class UserService {
   }
 
   async login(dados) {
-    const {data} = await this.axios.post("/login", dados)
-
-    if (data) {
-      localStorage.setItem("nome", data.user.nome)
-      localStorage.setItem("email", data.user.email)
-      localStorage.setItem("token", data.token.token)
-
-      return true
+    try {
+      const response = await this.axios.post("/auth/login", dados);
+      const { data } = response;
+  
+      if (data?.username && data?.email && data?.token) {
+        localStorage.setItem("username", data.username);
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("token", data.token);
+  
+        return true;
+      }
+  
+      return false;
+    } catch (error) {
+      console.error("Erro ao realizar login:", error);
+      return false;
     }
-
-    return false
   }
 
   async register(dados) {
-    return this.axios.post("/singup", dados)
+    return this.axios.post("/auth/singup", dados)
   }
 
-  authenticatedUser () {
-    return localStorage.getItem("token") !== undefined
+  authenticatedUser() {
+    const userToken = localStorage.getItem("token") 
+    return userToken !== undefined && userToken.length > 0
   }
 
   async logout() {
     localStorage.removeItem("token")
-    localStorage.removeItem("nome")
+    localStorage.removeItem("username")
     localStorage.removeItem("email")
   }
   

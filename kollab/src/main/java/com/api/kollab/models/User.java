@@ -37,4 +37,7 @@ public class User implements Serializable {
     @Field("registrationDate")
     private LocalDateTime registrationDate;
 
+    @Field("token")
+    private String token;
+
 }

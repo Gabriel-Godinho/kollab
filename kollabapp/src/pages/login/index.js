@@ -9,7 +9,7 @@ const userService = new UserService();
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState([{}])
+  const [form, setForm] = useState([{ email: "", password: "" }])
   const navigate = useNavigate()
 
   const handleSubmit = async (event) => {

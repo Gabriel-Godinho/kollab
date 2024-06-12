@@ -6,5 +6,6 @@ public record UserRecord(
     String username, 
     String userPassword, 
     String email, 
-    LocalDateTime registrationDate
+    LocalDateTime registrationDate,
+    String token
 ) {}

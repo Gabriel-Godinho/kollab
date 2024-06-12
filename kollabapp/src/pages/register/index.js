@@ -9,22 +9,23 @@ const userService = new UserService();
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState([{}])
+  const [form, setForm] = useState([{ username: "", email: "", password: "", confirmPassword: "" }])
   const navigate = useNavigate()
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       setLoading(true)
-      // TODO - AJUSTAR OBJETO PARA FICAR IGUAL AO BACKEND
-      const newUser = {
-        ...form
-      }
-      const { data } = await userService.register(newUser)
-      if (data) {
-        // TODO - AJUSTAR OBJETO PARA FICAR IGUAL AO BACKEND
-        const responseLogin = await userService.login(form)
-        if (responseLogin) navigate("/home")
+
+      if (form.password === form.confirmPassword) {
+        const { data } = await userService.register(form)
+
+        if (data) {
+          const responseLogin = await userService.login(form)
+          if (responseLogin) navigate("/home")
+        }
+      } else {
+        alert("As senhas não batem! Verifique-as e tente novamente.")
       }
       
       setLoading(false)
@@ -42,7 +43,7 @@ const Register = () => {
       <Form>
       <h1>Crie a sua conta</h1>
         <Input
-          name="name"
+          name="username"
           placeholder="Digite o seu nome de usuário"
           onChange={handleChange}
           type="email"

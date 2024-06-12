@@ -49,7 +49,36 @@ public class UserController {
                         .body(NOT_FOUND_MESSAGE));
     }
 
-    @PostMapping("/singup")
+    @PostMapping("/auth/login")
+    public ResponseEntity<Object> login(@RequestBody UserRecord user) {
+        final String EMAIL = user.email();
+        final String PASSWORD = user.userPassword();
+
+        if (EMAIL == null || EMAIL.isEmpty() || PASSWORD == null || PASSWORD.isEmpty()) {
+            final String BAD_REQUEST_USER_MESSAGE = "Email and password must not be empty";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BAD_REQUEST_USER_MESSAGE);
+        }
+
+        Optional<User> optionalUser = userService.findUserByEmail(EMAIL);
+
+        if (optionalUser.isPresent()) {
+            User userFound = optionalUser.get();
+            boolean isPasswordVerified = userService.verifyPasswordMatches(PASSWORD, userFound.getUserPassword());
+
+            if (isPasswordVerified) {
+                // Evita a exposição de senha no retorno
+                userFound.setUserPassword(null);
+                return ResponseEntity.ok(userFound);
+            } else {
+                final String UNAUTHORIZED_USER_MESSAGE = "Invalid email or password";
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(UNAUTHORIZED_USER_MESSAGE);
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(NOT_FOUND_MESSAGE);
+    }
+
+    @PostMapping("/auth/singup")
     public ResponseEntity<Object> saveUser(@RequestBody UserRecord user) {
         final String encodedPassword = userService.hashPassword(user.userPassword());
 
