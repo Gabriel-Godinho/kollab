@@ -9,8 +9,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     background-color: #f0f2f5;
     font-family: "Gill Sans", sans-serif;
   }
