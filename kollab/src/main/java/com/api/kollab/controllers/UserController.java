@@ -87,6 +87,7 @@ public class UserController {
         newUser.setEmail(user.email());
         newUser.setUserPassword(encodedPassword);
         newUser.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
+        newUser.setToken(userService.generateToken(user.username()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(newUser));
     }

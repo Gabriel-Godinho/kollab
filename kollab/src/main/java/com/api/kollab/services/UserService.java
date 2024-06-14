@@ -11,7 +11,11 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.util.Base64;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -55,6 +59,21 @@ public class UserService {
 
     public final boolean verifyPasswordMatches(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    public final String generateToken(String userId) {
+        // Gera um token único para um dado userId
+        // Gera um UUID aleatório
+        String randomUUID = UUID.randomUUID().toString();
+
+        // Obtém o timestamp atual em segundos
+        long timestamp = Instant.now().getEpochSecond();
+
+        // Concatena o userId, o timestamp e o UUID
+        String token = userId + "-" + timestamp + "-" + randomUUID;
+
+        // Codifica o token em Base64 para tornar o formato mais amigável
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(token.getBytes(StandardCharsets.UTF_8));
     }
 
 }
