@@ -1,83 +1,184 @@
 import React, { useState } from "react";
-import { Container, Form, SubContainerSign } from "./style";
-import Input from "../../components/input";
-import Button from "../../components/button";
 import UserService from "../../services/UserService";
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { NavLink, useNavigate } from "react-router-dom";
 
 const userService = new UserService();
+const defaultTheme = createTheme();
 
 const Register = () => {
-  const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState([{ username: "", email: "", password: "", confirmPassword: "" }])
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState({
+    username: false,
+    email: false,
+    userPassword: false,
+    confirmPassword: false,
+    passwordMismatch: false,
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      setLoading(true)
+    const formData = new FormData(event.currentTarget);
 
-      if (form.password === form.confirmPassword) {
-        const { data } = await userService.register(form)
+    const username = formData.get('username');
+    const email = formData.get('email');
+    const userPassword = formData.get('userPassword');
+    const confirmPassword = formData.get('confirmPassword');
 
-        if (data) {
-          const responseLogin = await userService.login(form)
-          if (responseLogin) navigate("/home")
-        }
-      } else {
-        alert("As senhas não batem! Verifique-as e tente novamente.")
-      }
-      
-      setLoading(false)
-    } catch (error) {
-      alert("Erro ao criar nova conta")
+    const newErrors = {
+      username: !username,
+      email: !email,
+      userPassword: !userPassword,
+      confirmPassword: !confirmPassword,
+      passwordMismatch: userPassword !== confirmPassword,
+    };
+
+    setErrors(newErrors);
+
+    if (Object.values(newErrors).some(error => error)) {
+      // Se houver erros, não prossegue
+      return;
     }
-  }
 
-  const handleChange = (event) => {
-    setForm({...form, [event.target.name]: [event.target.value]});
-  }
+    try {
+      const payload = {
+        username,
+        email,
+        userPassword,
+      };
+      const { data } = await userService.register(payload);
+      console.log(data);
+
+      if (data) {
+        await userService.login(payload);
+        navigate("/home");
+      }
+    } catch (error) {
+      alert("Erro ao criar nova conta");
+    }
+  };
 
   return (
-    <Container>
-      <Form>
-      <h1>Crie a sua conta</h1>
-        <Input
-          name="username"
-          placeholder="Digite o seu nome de usuário"
-          onChange={handleChange}
-          type="email"
-        />
-        <Input
-          name="email"
-          placeholder="Digite o seu e-mail"
-          onChange={handleChange}
-          type="email"
-        />
-        <Input
-          name="password"
-          placeholder="Digite a sua senha"
-          onChange={handleChange}
-          type="password"
-        />
-        <Input
-          name="confirmPassword"
-          placeholder="Confirme a sua senha"
-          onChange={handleChange}
-          type="password"
-        />
-        <Button 
-          type="submit"
-          text="Criar conta"
-          onClick={handleSubmit}
-          disabled={loading}
-        />
-        <SubContainerSign>
-          <p>Já possui conta? <NavLink to="/login">Entre!</NavLink></p>
-        </SubContainerSign>
-      </Form>
-    </Container>
+    <ThemeProvider theme={defaultTheme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  autoComplete="given-name"
+                  name="username"
+                  required
+                  fullWidth
+                  id="username"
+                  label="Nome de usuário"
+                  autoFocus
+                  error={errors.username}
+                  helperText={errors.username ? "Campo obrigatório" : ""}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="E-mail"
+                  name="email"
+                  autoComplete="email"
+                  error={errors.email}
+                  helperText={errors.email ? "Campo obrigatório" : ""}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="userPassword"
+                  label="Senha"
+                  type="password"
+                  id="userPassword"
+                  autoComplete="new-password"
+                  error={errors.userPassword || errors.passwordMismatch}
+                  helperText={errors.userPassword ? "Campo obrigatório" : ""}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="confirmPassword"
+                  label="Confirme sua senha"
+                  type="password"
+                  id="confirmPassword"
+                  autoComplete="new-password"
+                  error={errors.confirmPassword || errors.passwordMismatch}
+                  helperText={
+                    errors.confirmPassword
+                      ? "Campo obrigatório"
+                      : errors.passwordMismatch
+                        ? "As senhas não batem"
+                        : ""
+                  }
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={<Checkbox value="allowExtraEmails" color="primary" />}
+                  label="Desejo receber atualizações via e-mail."
+                />
+              </Grid>
+            </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Criar conta
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <NavLink 
+                  to="/login"
+                  style={{
+                    fontSize: 14
+                  }}
+                >
+                  Já tem uma conta? Faça login!
+                </NavLink>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 };
 
 export default Register;
+
