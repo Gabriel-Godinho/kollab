@@ -113,7 +113,7 @@ const Login = () => {
                 <NavLink 
                   to="/register"
                   style={{
-                    fontSize: 14
+                    fontSize: 13.5
                   }}
                 >
                   {"Não tem uma conta? Crie uma"}
