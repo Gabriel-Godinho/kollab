@@ -9,8 +9,7 @@ export default class UserService {
 
   async login(dados) {
     try {
-      const response = await this.axios.post("/auth/login", dados);
-      const { data } = response;
+      const { data } = await this.axios.post("/auth/login", dados);
   
       if (data?.username && data?.email && data?.token) {
         localStorage.setItem("username", data.username);
@@ -28,7 +27,8 @@ export default class UserService {
   }
 
   async register(dados) {
-    return this.axios.post("/auth/singup", dados)
+    const { data } = await this.axios.post("/auth/singup", dados)
+    return data
   }
 
   authenticatedUser() {
@@ -41,5 +41,11 @@ export default class UserService {
     localStorage.removeItem("username")
     localStorage.removeItem("email")
   }
-  
+
+  async getAllUsers() {
+    const { data } = await this.axios.get("/all")
+    console.log(data)
+
+    return data
+  }
 }

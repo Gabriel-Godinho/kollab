@@ -1,27 +1,26 @@
 import React from 'react';
 import Sidebar from '../../components/sidebar';
 import ProjectCard from '../../components/ProjectCard';
-import AddIcon from '@mui/icons-material/Add';
-import { Container, Box, Typography, Fab } from '@mui/material';
+import FormDialog from '../../components/FormDialog';
+import { Container, Box, Typography } from '@mui/material';
 
 const Home = () => {
   const username = localStorage.getItem("username")
 
   return (
     <Container maxWidth="md">
-      <Box sx={{ marginBottom: 4, marginTop: 10, marginLeft: 1 }}>
+      <Box sx={{ marginBottom: 5, marginTop: 10 }}>
         <Typography variant="h2">
           Bem-vindo(a)
           <Box sx={{ fontWeight: 'bold', display: 'inline', marginLeft: 1 }}>{username}!</Box>
         </Typography>
       </Box>
       <Sidebar/>
-      <Box sx={{ marginBottom: 4, marginTop: 10, marginLeft: 1 }}>
-        <ProjectCard title={"Biologia"} text={"TExto descrição texte"}/>
+      <Typography variant="h4">Seus projetos</Typography>
+      <Box sx={{ marginBottom: 4, marginTop: 2 }}>
+        <ProjectCard title={"Biologia"} text={"Texto descrição teste"}/>
       </Box>
-      <Fab color="primary" aria-label="add">
-        <AddIcon />
-      </Fab>
+      <FormDialog/>
     </Container>
   );
 }

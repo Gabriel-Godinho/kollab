@@ -30,6 +30,9 @@ public class Project implements Serializable {
     @Field("projectName")
     private String projectName;
 
+    @Field("projectDescription")
+    private String projectDescription;
+
     @Indexed(direction = IndexDirection.ASCENDING)
     @Field("adminUser")
     private String adminUser;

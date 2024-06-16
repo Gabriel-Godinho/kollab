@@ -10,8 +10,8 @@ const ProjectCard = ({title, text}) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
-        sx={{ height: 140 }}
-        image="https://randomuser.me/api/portraits/men/75.jpg"
+        sx={{ height: 200, paddingTop: "2%" }}
+        src={"../../public/logo192.png"}
         title={`Projeto: ${title}`}
       />
       <CardContent>

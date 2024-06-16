@@ -26,9 +26,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping
-    public ResponseEntity<Object> getAllUsers(@PageableDefault(size = 5, sort = "registrationDate", direction = Sort.Direction.ASC) Pageable pageable) {
-        return ResponseEntity.ok(userService.findAllUsers(pageable));
+    @GetMapping("/all")
+    public ResponseEntity<Object> getAllUsers() {
+        return ResponseEntity.ok(userService.findAllUsers());
     }
 
     @GetMapping("/user-id/{id}")

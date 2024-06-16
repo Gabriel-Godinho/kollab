@@ -57,7 +57,7 @@ const Register = () => {
         email,
         userPassword,
       };
-      const { data } = await userService.register(payload);
+      const data = await userService.register(payload);
       console.log(data);
 
       if (data) {
