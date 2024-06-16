@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import Sidebar from "../../components/sidebar";
+import Sidebar from "../../components/Sidebar";
 import SpeedDialTooltipOpen from "../../components/SpeedDialTooltipOpen";
 import { Container, Box, Typography } from "@mui/material";
 

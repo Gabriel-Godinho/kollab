@@ -26,4 +26,9 @@ public class ProjectService {
         return projectRepository.findProjectByAdminUser(adminUser);
     }
 
+    public Optional<List<Project>> findProjectWhereUserIsMember(String email) {
+        return projectRepository.findProjectWhereUserIsMember(email);
+    }
+
+
 }

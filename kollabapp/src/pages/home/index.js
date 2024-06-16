@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import Sidebar from "../../components/sidebar";
+import Sidebar from "../../components/Sidebar";
 import ProjectCard from "../../components/ProjectCard";
 import FormDialog from "../../components/FormDialog";
 import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
-import GroupIcon from '@mui/icons-material/Group';
-import EngineeringIcon from '@mui/icons-material/Engineering';
+import Paper from "@mui/material/Paper";
+import GroupIcon from "@mui/icons-material/Group";
+import EngineeringIcon from "@mui/icons-material/Engineering";
 import { Container, Box, Typography } from "@mui/material";
 import ProjectService from "../../services/ProjectService";
 
-const projectService = new ProjectService();
+const loggedUser = localStorage.getItem("email");
+const projectService = new ProjectService(loggedUser);
 
 const Home = () => {
   const username = localStorage.getItem("username");
@@ -18,8 +20,12 @@ const Home = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await projectService.getUserProjects();
-      setProjectsList(response);
+      const userProjects = await projectService.getUserProjects();
+      setProjectsList(userProjects);
+
+      const projectsWhereUserIsMemberList =
+        await projectService.getProjectsWhereUserIsMember();
+      setMemberProjectsList(projectsWhereUserIsMemberList);
     } catch (error) {
       console.error("Erro ao buscar projetos:", error);
     }
@@ -31,7 +37,6 @@ const Home = () => {
 
   return (
     <Box sx={{ display: "flex" }}>
-      {/* Sidebar should be a separate component */}
       <Sidebar />
       <Container
         maxWidth="lg"
@@ -65,13 +70,28 @@ const Home = () => {
             Seus projetos ({projectsList.length})
           </Typography>
         </Box>
-        <Grid container spacing={3}>
-          {projectsList.map((project) => (
-            <Grid item key={project.id} xs={12} sm={6} md={4}>
-              <ProjectCard projectDetails={project} />
-            </Grid>
-          ))}
-        </Grid>
+        {projectsList.length > 0 ? (
+          <Grid container spacing={3}>
+            {projectsList.map((project) => (
+              <Grid item key={project.id} xs={12} sm={6} md={4}>
+                <ProjectCard projectDetails={project} />
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Paper
+            elevation={3}
+            sx={{
+              padding: 3,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: 100,
+            }}
+          >
+            <Typography variant="h6">Sem projetos</Typography>
+          </Paper>
+        )}
         <Divider />
         <Box sx={{ mt: 4, display: "flex", alignItems: "center" }}>
           <GroupIcon fontSize="large" sx={{ mr: 1 }} />
@@ -79,6 +99,28 @@ const Home = () => {
             Projetos em que você é membro ({projectsList.length})
           </Typography>
         </Box>
+        {memberProjectsList.length > 0 ? (
+          <Grid container spacing={3}>
+            {memberProjectsList.map((project) => (
+              <Grid item key={project.id} xs={12} sm={6} md={4}>
+                <ProjectCard projectDetails={project} />
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Paper
+            elevation={3}
+            sx={{
+              padding: 3,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: 100,
+            }}
+          >
+            <Typography variant="h6">Sem projetos</Typography>
+          </Paper>
+        )}
       </Container>
     </Box>
   );

@@ -1,15 +1,22 @@
 import axios from "axios";
 
 export default class ProjectService {
-  constructor() {
+  constructor(loggedUser) {
+    this.loggedUser = loggedUser
+
     this.axios = axios.create({
       baseURL: process.env.REACT_APP_API_LOGIN + "/api/1.0/project",
     });
   }
 
   async getUserProjects() {
-    const loggedUser = localStorage.getItem("email");
-    const { data } = await this.axios.get(`/${loggedUser}`);
+    const { data } = await this.axios.get(`/${this.loggedUser}`);
+
+    return data;
+  }
+
+  async getProjectsWhereUserIsMember() {
+    const { data } = await this.axios.get(`/member/${this.loggedUser}`);
 
     return data;
   }

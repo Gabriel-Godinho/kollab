@@ -18,4 +18,7 @@ public interface ProjectRepository extends MongoRepository<Project, String> {
     @Query("{adminUser: '?0'}")
     Optional<List<Project>> findProjectByAdminUser(String adminUser);
 
+    @Query("{members: '?0'}")
+    Optional<List<Project>> findProjectWhereUserIsMember(String email);
+
 }

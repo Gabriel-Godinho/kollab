@@ -44,4 +44,13 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newProject);
     }
 
+    @GetMapping("/member/{email}")
+    public ResponseEntity<Object> getProjectWhereUserIsMember(@PathVariable(value = "email") String email) {
+        Optional<List<Project>> projectsWhereUserIsMember = projectService.findProjectWhereUserIsMember(email);
+
+        return projectsWhereUserIsMember.<ResponseEntity<Object>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(NOT_FOUND_MESSAGE));
+    }
+
 }

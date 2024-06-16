@@ -17,7 +17,8 @@ import ProjectService from "../../services/ProjectService";
 import UserService from "../../services/UserService";
 import { useNavigate } from "react-router-dom";
 
-const projectService = new ProjectService();
+const loggedUser = localStorage.getItem("email");
+const projectService = new ProjectService(loggedUser);
 const userService = new UserService();
 
 const FormDialog = () => {
