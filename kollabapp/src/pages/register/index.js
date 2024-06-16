@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import UserService from "../../services/UserService";
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const userService = new UserService();
@@ -31,10 +31,10 @@ const Register = () => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    const username = formData.get('username');
-    const email = formData.get('email');
-    const userPassword = formData.get('userPassword');
-    const confirmPassword = formData.get('confirmPassword');
+    const username = formData.get("username");
+    const email = formData.get("email");
+    const userPassword = formData.get("userPassword");
+    const confirmPassword = formData.get("confirmPassword");
 
     const newErrors = {
       username: !username,
@@ -46,7 +46,7 @@ const Register = () => {
 
     setErrors(newErrors);
 
-    if (Object.values(newErrors).some(error => error)) {
+    if (Object.values(newErrors).some((error) => error)) {
       // Se houver erros, não prossegue
       return;
     }
@@ -76,18 +76,23 @@ const Register = () => {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -141,14 +146,16 @@ const Register = () => {
                     errors.confirmPassword
                       ? "Campo obrigatório"
                       : errors.passwordMismatch
-                        ? "As senhas não batem"
-                        : ""
+                      ? "As senhas não batem"
+                      : ""
                   }
                 />
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
+                  control={
+                    <Checkbox value="allowExtraEmails" color="primary" />
+                  }
                   label="Desejo receber atualizações via e-mail."
                 />
               </Grid>
@@ -163,10 +170,10 @@ const Register = () => {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <NavLink 
+                <NavLink
                   to="/login"
                   style={{
-                    fontSize: 14
+                    fontSize: 14,
                   }}
                 >
                   Já tem uma conta? Faça login!
@@ -181,4 +188,3 @@ const Register = () => {
 };
 
 export default Register;
-

@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import UserService from "../../services/UserService";
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const userService = new UserService();
@@ -23,8 +23,8 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const email = formData.get('email');
-    const userPassword = formData.get('userPassword');
+    const email = formData.get("email");
+    const userPassword = formData.get("userPassword");
 
     const newErrors = {
       email: !email,
@@ -41,7 +41,7 @@ const Login = () => {
     try {
       const payload = {
         email,
-        userPassword
+        userPassword,
       };
       const loginSuccessful = await userService.login(payload);
       console.log(loginSuccessful);
@@ -59,18 +59,23 @@ const Login = () => {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Login
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
             <TextField
               margin="normal"
               required
@@ -110,10 +115,10 @@ const Login = () => {
                 </Link>
               </Grid>
               <Grid item>
-                <NavLink 
+                <NavLink
                   to="/register"
                   style={{
-                    fontSize: 13.5
+                    fontSize: 13.5,
                   }}
                 >
                   {"Não tem uma conta? Crie uma"}

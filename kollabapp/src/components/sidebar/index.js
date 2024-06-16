@@ -1,14 +1,34 @@
-import React, { useState } from 'react';
-import { AppBar, Box, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, useMediaQuery } from '@mui/material';
-import { Menu as MenuIcon, Home as HomeIcon, AccountCircle as AccountCircleIcon, Logout as LogoutIcon } from '@mui/icons-material';
-import { useTheme } from '@mui/material/styles';
+import React, { useState } from "react";
+import {
+  AppBar,
+  Box,
+  CssBaseline,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
+import {
+  Menu as MenuIcon,
+  Home as HomeIcon,
+  AccountCircle as AccountCircleIcon,
+  Logout as LogoutIcon,
+} from "@mui/icons-material";
+import { useTheme } from "@mui/material/styles";
 
 const drawerWidth = 240;
 
 const Sidebar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
-  const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
+  const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -19,7 +39,7 @@ const Sidebar = () => {
       <Toolbar />
       <Divider />
       <List>
-        {['Home', 'Perfil'].map((text, index) => (
+        {["Home", "Perfil"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -45,13 +65,13 @@ const Sidebar = () => {
   );
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
         position="fixed"
-        sx={{ 
+        sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` }
+          ml: { sm: `${drawerWidth}px` },
         }}
       >
         <Toolbar>
@@ -81,12 +101,12 @@ const Sidebar = () => {
           open={isSmUp || mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true
+            keepMounted: true,
           }}
           sx={{
-            '& .MuiDrawer-paper': { 
+            "& .MuiDrawer-paper": {
               width: drawerWidth,
-              boxSizing: 'border-box' 
+              boxSizing: "border-box",
             },
           }}
         >
@@ -95,12 +115,16 @@ const Sidebar = () => {
       </Box>
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+        }}
       >
         <Toolbar />
       </Box>
     </Box>
   );
-}
+};
 
 export default Sidebar;
