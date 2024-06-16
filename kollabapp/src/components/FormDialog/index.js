@@ -6,37 +6,42 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
 import InputAdornment from "@mui/material/InputAdornment";
 import Autocomplete from "@mui/material/Autocomplete";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import Chip from "@mui/material/Chip";
 import ProjectService from "../../services/ProjectService";
 import UserService from "../../services/UserService";
 import { useNavigate } from "react-router-dom";
 
 const projectService = new ProjectService();
 const userService = new UserService();
-const members = [];
 
 const FormDialog = () => {
+  const navigate = useNavigate();
+  const [selectedMembers, setSelectedMembers] = useState([]);
   const [open, setOpen] = useState(false);
+  const [users, setUsers] = useState([]);
   const [errors, setErrors] = useState({
     projectName: false,
     projectDescription: false,
   });
-  const [users, setUsers] = useState([]);
-  const navigate = useNavigate();
 
   const fetchUsers = async () => {
     try {
       const response = await userService.getAllUsers();
+
       setUsers(response);
     } catch (error) {
       console.error("Erro ao buscar usuários:", error);
     }
+  };
+
+  const handleMembersChange = (event, value) => {
+    setSelectedMembers(value); // `value` é um array de objetos usuário
   };
 
   const handleClickOpen = () => {
@@ -50,11 +55,11 @@ const FormDialog = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     const formData = new FormData(event.currentTarget);
     const adminUser = localStorage.getItem("email");
     const projectName = formData.get("projectName");
     const projectDescription = formData.get("projectDescription");
-
     const newErrors = {
       projectName: !projectName,
       projectDescription: !projectDescription,
@@ -68,19 +73,19 @@ const FormDialog = () => {
     }
 
     try {
-      const payload = {
-        projectName,
-        projectDescription,
-        adminUser,
-        members,
+      const projectDetails = {
+        projectName: projectName,
+        projectDescription: projectDescription,
+        adminUser: adminUser,
+        members: selectedMembers.map(member => member.email)
       };
 
-      console.log(payload);
+      const createdSuccessful = await projectService.createProject(
+        projectDetails
+      );
 
-      const createdSuccessful = await projectService.createProject(payload);
-      console.log(createdSuccessful);
+      if (createdSuccessful) navigate("/project", { state: projectDetails });
 
-      if (createdSuccessful) navigate("/project");
       handleClose();
     } catch (error) {
       alert("Erro ao criar o projeto");
@@ -90,9 +95,13 @@ const FormDialog = () => {
   return (
     <React.Fragment>
       <Tooltip title="Novo projeto">
-        <Fab color="primary" aria-label="add" onClick={handleClickOpen}>
-          <AddIcon />
-        </Fab>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleClickOpen}
+        >
+          Novo Projeto
+        </Button>
       </Tooltip>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Novo projeto</DialogTitle>
@@ -144,8 +153,20 @@ const FormDialog = () => {
               limitTags={2}
               id="members"
               options={users}
-              onChange={(event, value) => members.push(value.email)}
+              onChange={handleMembersChange}
+              value={selectedMembers} // Vincula o estado do Autocomplete ao estado local
               getOptionLabel={(option) => option.email}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    key={option.email}
+                    variant="outlined"
+                    label={option.email}
+                    size="small"
+                    {...getTagProps({ index })}
+                  />
+                ))
+              }
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -154,9 +175,12 @@ const FormDialog = () => {
                   InputProps={{
                     ...params.InputProps,
                     startAdornment: (
-                      <InputAdornment position="start">
-                        <AccountCircleIcon />
-                      </InputAdornment>
+                      <>
+                        <InputAdornment position="start">
+                          <AccountCircleIcon />
+                        </InputAdornment>
+                        {params.InputProps.startAdornment}
+                      </>
                     ),
                   }}
                 />

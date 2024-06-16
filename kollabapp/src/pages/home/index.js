@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/sidebar";
 import ProjectCard from "../../components/ProjectCard";
 import FormDialog from "../../components/FormDialog";
+import Grid from "@mui/material/Grid";
+import Divider from "@mui/material/Divider";
+import GroupIcon from '@mui/icons-material/Group';
+import EngineeringIcon from '@mui/icons-material/Engineering';
 import { Container, Box, Typography } from "@mui/material";
 import ProjectService from "../../services/ProjectService";
 
@@ -10,6 +14,7 @@ const projectService = new ProjectService();
 const Home = () => {
   const username = localStorage.getItem("username");
   const [projectsList, setProjectsList] = useState([]);
+  const [memberProjectsList, setMemberProjectsList] = useState([]);
 
   const fetchProjects = async () => {
     try {
@@ -25,30 +30,57 @@ const Home = () => {
   }, []);
 
   return (
-    <Container maxWidth="md">
-      <Box sx={{ marginBottom: 5, marginTop: 10 }}>
-        <Typography variant="h2">
-          Bem-vindo(a)
-          <Box sx={{ fontWeight: "bold", display: "inline", marginLeft: 1 }}>
-            {username}!
-          </Box>
-        </Typography>
-      </Box>
+    <Box sx={{ display: "flex" }}>
+      {/* Sidebar should be a separate component */}
       <Sidebar />
-      <Typography variant="h4">
-        Seus projetos ({projectsList.length})
-      </Typography>
-      <Box sx={{ marginBottom: 4, marginTop: 2 }}>
-        {projectsList.map((project) => (
-          <ProjectCard
-            key={project.id}
-            title={project.projectName}
-            text={project.projectDescription}
-          />
-        ))}
-      </Box>
-      <FormDialog />
-    </Container>
+      <Container
+        maxWidth="lg"
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          gap: 5,
+          pt: 10,
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            variant="h3"
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
+            Bem-vindo(a),{" "}
+            <span style={{ fontWeight: "bold" }}>{username}!</span> 😃
+          </Typography>
+          <FormDialog />
+        </Box>
+        <Box sx={{ mt: 4, display: "flex", alignItems: "center" }}>
+          <EngineeringIcon fontSize="large" sx={{ mr: 1 }} />
+          <Typography variant="h4">
+            Seus projetos ({projectsList.length})
+          </Typography>
+        </Box>
+        <Grid container spacing={3}>
+          {projectsList.map((project) => (
+            <Grid item key={project.id} xs={12} sm={6} md={4}>
+              <ProjectCard projectDetails={project} />
+            </Grid>
+          ))}
+        </Grid>
+        <Divider />
+        <Box sx={{ mt: 4, display: "flex", alignItems: "center" }}>
+          <GroupIcon fontSize="large" sx={{ mr: 1 }} />
+          <Typography variant="h4">
+            Projetos em que você é membro ({projectsList.length})
+          </Typography>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 

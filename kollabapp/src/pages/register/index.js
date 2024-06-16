@@ -29,8 +29,8 @@ const Register = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
 
+    const formData = new FormData(event.currentTarget);
     const username = formData.get("username");
     const email = formData.get("email");
     const userPassword = formData.get("userPassword");
@@ -53,16 +53,18 @@ const Register = () => {
 
     try {
       const payload = {
-        username,
-        email,
-        userPassword,
+        username: username,
+        email: email,
+        userPassword: userPassword,
       };
       const data = await userService.register(payload);
+
       console.log(data);
 
       if (data) {
-        await userService.login(payload);
-        navigate("/home");
+        const loginSuccess = await userService.login(payload);
+
+        if (loginSuccess) navigate("/home");
       }
     } catch (error) {
       alert("Erro ao criar nova conta");

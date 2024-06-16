@@ -22,10 +22,10 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     const formData = new FormData(event.currentTarget);
     const email = formData.get("email");
     const userPassword = formData.get("userPassword");
-
     const newErrors = {
       email: !email,
       userPassword: !userPassword,
@@ -39,11 +39,11 @@ const Login = () => {
     }
 
     try {
-      const payload = {
-        email,
-        userPassword,
+      const userCredentials = {
+        email: email,
+        userPassword: userPassword,
       };
-      const loginSuccessful = await userService.login(payload);
+      const loginSuccessful = await userService.login(userCredentials);
       console.log(loginSuccessful);
 
       if (loginSuccessful) navigate("/home");
