@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -15,14 +15,17 @@ import Autocomplete from '@mui/material/Autocomplete';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ProjectService from '../../services/ProjectService';
 import UserService from "../../services/UserService";
+import { useNavigate } from "react-router-dom";
 
 const projectService = new ProjectService();
 const userService = new UserService();
+const members = [];
 
 const FormDialog = () =>  {
   const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState({ projectName: false, projectDescription: false });
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
 
   const fetchUsers = async () => {
     try {
@@ -45,6 +48,7 @@ const FormDialog = () =>  {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+    const adminUser = localStorage.getItem("email")
     const projectName = formData.get("projectName");
     const projectDescription = formData.get("projectDescription");
 
@@ -63,12 +67,17 @@ const FormDialog = () =>  {
     try {
       const payload = {
         projectName,
-        projectDescription
+        projectDescription,
+        adminUser,
+        members
       };
+
+      console.log(payload)
+
       const createdSuccessful = await projectService.createProject(payload);
       console.log(createdSuccessful);
 
-      if (createdSuccessful) alert("Projeto criado com sucesso!");
+      if (createdSuccessful) navigate("/project");
       handleClose();
     } catch (error) {
       alert("Erro ao criar o projeto");
@@ -124,7 +133,7 @@ const FormDialog = () =>  {
               limitTags={2}
               id="members"
               options={users}
-              onChange={(event, value) => console.log(value)}
+              onChange={(event, value) => members.push(value.email)}
               getOptionLabel={(option) => option.email}
               renderInput={(params) => (
                 <TextField {...params} label="Participantes" placeholder="Adicionar participantes" InputProps={{

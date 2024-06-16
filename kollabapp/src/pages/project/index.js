@@ -7,7 +7,7 @@ import ProjectService from '../../services/ProjectService';
 
 const projectService = new ProjectService;
 
-const Home = () => {
+const Project = () => {
   const username = localStorage.getItem("username")
   const [projectsList, setProjectsList ] = useState([])
 
@@ -20,9 +20,7 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
+  fetchProjects();
 
   return (
     <Container maxWidth="md">
@@ -35,13 +33,10 @@ const Home = () => {
       <Sidebar/>
       <Typography variant="h4">Seus projetos ({projectsList.length})</Typography>
       <Box sx={{ marginBottom: 4, marginTop: 2 }}>
-        {projectsList.map((project) => (
-          <ProjectCard key={project.id} title={project.projectName} text={project.projectDescription}/>
-        ))}
       </Box>
       <FormDialog/>
     </Container>
   );
 }
 
-export default Home;
+export default Project;
