@@ -6,13 +6,13 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import BackgroundImage from "../../assets/Artboard-1.jpg"
+import BackgroundImage from "../../assets/Artboard-1.jpg";
 
 const ProjectCard = ({ projectDetails }) => {
   const navigate = useNavigate();
 
   const handleEnterProject = () => {
-    navigate('/project', { state: projectDetails });
+    navigate("/project", { state: projectDetails });
   };
 
   return (
@@ -32,7 +32,11 @@ const ProjectCard = ({ projectDetails }) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button variant="contained" color="success" onClick={handleEnterProject}>
+        <Button
+          variant="contained"
+          color="success"
+          onClick={handleEnterProject}
+        >
           Entrar
         </Button>
         <Button variant="contained" color="error">

@@ -78,7 +78,7 @@ const FormDialog = () => {
         projectName: projectName,
         projectDescription: projectDescription,
         adminUser: adminUser,
-        members: selectedMembers.map(member => member.email)
+        members: selectedMembers.map((member) => member.email),
       };
 
       const createdSuccessful = await projectService.createProject(

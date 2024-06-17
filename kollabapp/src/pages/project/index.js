@@ -88,28 +88,36 @@ const Project = () => {
             <Box
               {...getRootProps()}
               sx={{
-                border: '2px dashed #ccc',
+                border: "2px dashed #ccc",
                 padding: 3,
-                textAlign: 'center',
-                cursor: 'pointer',
-                backgroundColor: isDragActive ? '#f0f0f0' : '#fafafa'
+                textAlign: "center",
+                cursor: "pointer",
+                backgroundColor: isDragActive ? "#f0f0f0" : "#fafafa",
               }}
             >
               <input {...getInputProps()} />
               {isDragActive ? (
                 <Typography>Solte os arquivos aqui...</Typography>
               ) : (
-                <Typography>Arraste e solte alguns arquivos aqui ou clique para selecionar arquivos</Typography>
+                <Typography>
+                  Arraste e solte alguns arquivos aqui ou clique para selecionar
+                  arquivos
+                </Typography>
               )}
             </Box>
             <List sx={{ mt: 3 }}>
               {files.map((file) => (
                 <ListItem key={file.id}>
-                  <ListItemText primary={file.name} secondary={`${(file.size / 1024).toFixed(2)} KB`} />
+                  <ListItemText
+                    primary={file.name}
+                    secondary={`${(file.size / 1024).toFixed(2)} KB`}
+                  />
                 </ListItem>
               ))}
               {files.length === 0 && (
-                <Typography variant="body2" sx={{ mt: 2 }}>Nenhum arquivo carregado ainda.</Typography>
+                <Typography variant="body2" sx={{ mt: 2 }}>
+                  Nenhum arquivo carregado ainda.
+                </Typography>
               )}
             </List>
           </Paper>
