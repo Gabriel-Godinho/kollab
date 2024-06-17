@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import UserService from "../../services/UserService";
 import {
   AppBar,
   Box,
@@ -21,17 +22,26 @@ import {
   AccountCircle as AccountCircleIcon,
   Logout as LogoutIcon,
 } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
+const userService = new UserService();
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleLogout = () => {
+    userService.logout();
+    navigate("/login");
   };
 
   const drawerContent = (
@@ -41,7 +51,10 @@ const Sidebar = () => {
       <List>
         {["Home", "Perfil"].map((text, index) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton
+              component={Link}
+              to={index % 2 === 0 ? "/home" : "/profile"}
+            >
               <ListItemIcon>
                 {index % 2 === 0 ? <HomeIcon /> : <AccountCircleIcon />}
               </ListItemIcon>
@@ -53,7 +66,7 @@ const Sidebar = () => {
       <Divider />
       <List>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton onClick={handleLogout}>
             <ListItemIcon>
               <LogoutIcon />
             </ListItemIcon>

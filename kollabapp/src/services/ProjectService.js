@@ -2,7 +2,7 @@ import axios from "axios";
 
 export default class ProjectService {
   constructor(loggedUser) {
-    this.loggedUser = loggedUser
+    this.loggedUser = loggedUser;
 
     this.axios = axios.create({
       baseURL: process.env.REACT_APP_API_LOGIN + "/api/1.0/project",

@@ -82,6 +82,7 @@ const Home = () => {
           <Paper
             elevation={3}
             sx={{
+              mb: 3,
               padding: 3,
               display: "flex",
               justifyContent: "center",
@@ -111,6 +112,7 @@ const Home = () => {
           <Paper
             elevation={3}
             sx={{
+              mb: 3,
               padding: 3,
               display: "flex",
               justifyContent: "center",
