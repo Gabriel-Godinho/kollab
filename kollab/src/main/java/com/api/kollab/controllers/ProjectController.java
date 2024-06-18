@@ -41,7 +41,7 @@ public class ProjectController {
         newProject.setMembers(projectRecord.members());
         newProject.setCreationDate(LocalDateTime.now(ZoneId.of("UTC")));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(newProject);
+        return ResponseEntity.status(HttpStatus.CREATED).body(projectService.saveProject(newProject));
     }
 
     @GetMapping("/member/{email}")

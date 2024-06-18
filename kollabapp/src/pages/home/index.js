@@ -46,6 +46,7 @@ const Home = () => {
           flexDirection: "column",
           gap: 5,
           pt: 10,
+          pb: 5
         }}
       >
         <Box
@@ -97,7 +98,7 @@ const Home = () => {
         <Box sx={{ mt: 4, display: "flex", alignItems: "center" }}>
           <GroupIcon fontSize="large" sx={{ mr: 1 }} />
           <Typography variant="h4">
-            Projetos em que você é membro ({projectsList.length})
+            Projetos em que você é membro ({memberProjectsList.length})
           </Typography>
         </Box>
         {memberProjectsList.length > 0 ? (
