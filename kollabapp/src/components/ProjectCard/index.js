@@ -10,6 +10,7 @@ import BackgroundImage from "../../assets/Artboard-1.jpg";
 
 const ProjectCard = ({ projectDetails }) => {
   const navigate = useNavigate();
+  const loggedUser = localStorage.getItem("email");
 
   const handleEnterProject = () => {
     navigate("/project", { state: projectDetails });
@@ -39,9 +40,13 @@ const ProjectCard = ({ projectDetails }) => {
         >
           Entrar
         </Button>
-        <Button variant="contained" color="error">
-          Encerrar projeto
-        </Button>
+        {projectDetails.adminUser === loggedUser ? (
+          <Button variant="contained" color="error">
+            Encerrar projeto
+          </Button>
+        ) : (
+          ""
+        )}
       </CardActions>
     </Card>
   );

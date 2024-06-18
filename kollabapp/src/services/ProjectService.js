@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// TODO - UTILIZAR FUNÇÕES E NÃO UMA CLASSE
 export default class ProjectService {
   constructor(loggedUser) {
     this.loggedUser = loggedUser;

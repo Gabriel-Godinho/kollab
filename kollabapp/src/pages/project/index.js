@@ -19,6 +19,7 @@ import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import Sidebar from "../../components/Sidebar";
 import { useDropzone } from "react-dropzone";
 import SpeedDialTooltipOpen from "../../components/SpeedDialTooltipOpen";
+import CommentAvatar from "../../assets/avatar.png";
 
 const Project = () => {
   const location = useLocation();
@@ -35,7 +36,7 @@ const Project = () => {
           id: commentsList.length + 1,
           user: "Você",
           text: newComment,
-          avatar: "../../assets/avatar.png",
+          avatar: CommentAvatar,
         },
       ]);
       setNewComment("");
@@ -137,7 +138,7 @@ const Project = () => {
               rows={3}
               fullWidth
               value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
+              onChange={(event) => setNewComment(event.target.value)}
             />
             <Button
               variant="contained"

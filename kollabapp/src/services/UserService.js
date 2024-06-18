@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// TODO - UTILIZAR FUNÇÕES E NÃO UMA CLASSE
 export default class UserService {
   constructor() {
     this.axios = axios.create({
