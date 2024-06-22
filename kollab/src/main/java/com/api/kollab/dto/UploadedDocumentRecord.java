@@ -2,7 +2,7 @@ package com.api.kollab.dto;
 
 import java.time.LocalDateTime;
 
-public record DocumentRecord(
+public record UploadedDocumentRecord(
     String projectId, 
     String userId, 
     String documentName, 

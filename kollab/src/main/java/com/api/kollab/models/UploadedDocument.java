@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor @AllArgsConstructor
 @ToString @EqualsAndHashCode
 @Getter @Setter
-public class Archive implements Serializable {
+public class UploadedDocument implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
