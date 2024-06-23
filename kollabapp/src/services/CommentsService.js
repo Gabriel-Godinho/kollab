@@ -4,16 +4,18 @@ import axios from "axios";
 export default class CommentsService {
   constructor() {
     this.axios = axios.create({
-      baseURL: process.env.REACT_APP_API_LOGIN + "/api/1.0/comments",
+      baseURL: process.env.REACT_APP_API_LOGIN + "/api/1.0/comment",
     });
   }
 
   async saveComment(newComment) {
-    this.axios.post("/save", newComment);
+    const { data } = await this.axios.post("/save", newComment);
+    return data;
   }
 
   async getAllCommentsFromProject(projectId) {
-    const { data } = this.axios.get(`/all/${projectId}`);
+    const userEmail = localStorage.getItem("email");
+    const { data } = await this.axios.get(`/all/${projectId}/${userEmail}`);
 
     return data;
   }

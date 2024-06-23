@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import {
   Box,
@@ -20,6 +20,9 @@ import Sidebar from "../../components/Sidebar";
 import { useDropzone } from "react-dropzone";
 import SpeedDialTooltipOpen from "../../components/SpeedDialTooltipOpen";
 import CommentAvatar from "../../assets/avatar.png";
+import CommentsService from "../../services/CommentsService";
+
+const commentService = new CommentsService();
 
 const Project = () => {
   const location = useLocation();
@@ -28,18 +31,40 @@ const Project = () => {
   const [commentsList, setCommentsList] = useState([]);
   const [files, setFiles] = useState([]);
 
-  const handleAddComment = () => {
-    if (newComment.trim() !== "") {
-      setCommentsList([
-        ...commentsList,
-        {
-          id: commentsList.length + 1,
-          user: "Você",
-          text: newComment,
-          avatar: CommentAvatar,
-        },
-      ]);
-      setNewComment("");
+  const fetchComments = async () => {
+    setCommentsList([]);
+    
+    try {
+      const savedCommentsList = await commentService.getAllCommentsFromProject(projectDetails.id);
+      setCommentsList(savedCommentsList);
+    } catch (error) {
+      console.error("Erro ao buscar comentários:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchComments();
+  }, [projectDetails.projectName]);
+
+  const handleAddComment = async () => {
+    try {
+      if (newComment.trim() !== "") {
+        const userEmail = localStorage.getItem("email");
+        const completeNewComment = {
+          projectId: projectDetails.id,
+          userId: userEmail,
+          comment: newComment
+        };
+
+        const commentResponse = await commentService.saveComment(completeNewComment);
+
+        if (commentResponse) {
+          setCommentsList((prevCommentsList) => [...prevCommentsList, completeNewComment]);
+          setNewComment("");
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao adicionar comentário:", error);
     }
   };
 
@@ -153,18 +178,18 @@ const Project = () => {
               {commentsList.map((comment) => (
                 <ListItem key={comment.id} alignItems="flex-start">
                   <Avatar
-                    src={comment.avatar}
-                    alt={comment.user}
+                    src={CommentAvatar}
+                    alt={comment.userId}
                     sx={{ mr: 2 }}
                   />
                   <ListItemText
                     primary={
                       <Typography variant="subtitle2">
-                        {comment.user}
+                        {comment.userId}
                       </Typography>
                     }
                     secondary={
-                      <Typography variant="body2">{comment.text}</Typography>
+                      <Typography variant="body2">{comment.comment}</Typography>
                     }
                   />
                 </ListItem>
