@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.lang.annotation.Inherited;
 import java.time.LocalDateTime;
 import java.util.List;
 

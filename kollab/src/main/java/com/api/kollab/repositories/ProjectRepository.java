@@ -12,13 +12,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProjectRepository extends MongoRepository<Project, String> {
 
-    @Query("{projectName: '?0'}")
+    @Query("{ projectName: '?0' }")
     Optional<Project> findProjectByName(String projectName);
 
-    @Query("{adminUser: '?0'}")
+    @Query("{ adminUser: '?0' }")
     Optional<List<Project>> findProjectByAdminUser(String adminUser);
 
-    @Query("{members: '?0'}")
+    @Query("{ members: '?0' }")
     Optional<List<Project>> findProjectWhereUserIsMember(String email);
 
 }

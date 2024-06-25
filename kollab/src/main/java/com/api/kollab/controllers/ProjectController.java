@@ -18,7 +18,7 @@ import java.util.Optional;
 @RequestMapping("/api/1.0/project")
 public class ProjectController {
 
-    private static final String NOT_FOUND_MESSAGE = "User not found!";
+    private static final String NOT_FOUND_MESSAGE = "Project not found!";
 
     @Autowired
     ProjectService projectService;
@@ -28,6 +28,15 @@ public class ProjectController {
         Optional<List<Project>> projectsList = projectService.findProjectByAdminUser(adminUser);
 
         return projectsList.<ResponseEntity<Object>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(NOT_FOUND_MESSAGE));
+    }
+
+    @GetMapping("/member/{email}")
+    public ResponseEntity<Object> getProjectWhereUserIsMember(@PathVariable(value = "email") String email) {
+        Optional<List<Project>> projectsWhereUserIsMember = projectService.findProjectWhereUserIsMember(email);
+
+        return projectsWhereUserIsMember.<ResponseEntity<Object>>map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(NOT_FOUND_MESSAGE));
     }
@@ -42,15 +51,6 @@ public class ProjectController {
         newProject.setCreationDate(LocalDateTime.now(ZoneId.of("UTC")));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(projectService.saveProject(newProject));
-    }
-
-    @GetMapping("/member/{email}")
-    public ResponseEntity<Object> getProjectWhereUserIsMember(@PathVariable(value = "email") String email) {
-        Optional<List<Project>> projectsWhereUserIsMember = projectService.findProjectWhereUserIsMember(email);
-
-        return projectsWhereUserIsMember.<ResponseEntity<Object>>map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(NOT_FOUND_MESSAGE));
     }
 
 }

@@ -18,7 +18,7 @@ import java.util.Optional;
 @RequestMapping("/api/1.0/comment")
 public class CommentController {
 
-    private static final String NOT_FOUND_MESSAGE = "User not found!";
+    private static final String NOT_FOUND_MESSAGE = "Comments not found!";
 
     @Autowired
     CommentService commentService;

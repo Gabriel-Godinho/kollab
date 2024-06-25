@@ -30,5 +30,4 @@ public class ProjectService {
         return projectRepository.findProjectWhereUserIsMember(email);
     }
 
-
 }
