@@ -32,8 +32,6 @@ const Project = () => {
   const [files, setFiles] = useState([]);
 
   const fetchComments = async () => {
-    setCommentsList([]);
-    
     try {
       const savedCommentsList = await commentService.getAllCommentsFromProject(projectDetails.id);
       setCommentsList(savedCommentsList);
